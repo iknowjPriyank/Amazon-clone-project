@@ -12,6 +12,7 @@ import UserData from '../pages/UserData';
 import ProductInfoScreen from '../screens/ProductInfoScreen';
 import CartScreen from '../screens/CartScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import AddAdressScreen from '../screens/AddAdressScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -70,7 +71,7 @@ function BottomTabs() {
 function AppNavigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Main'>
+      <Stack.Navigator initialRouteName='Register'>
         <Stack.Screen
           name="LogIn"
           component={LoginScreen}
@@ -78,6 +79,10 @@ function AppNavigation() {
         <Stack.Screen
           name="Register"
           component={RegisterScreen}
+          options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
           options={{ headerShown: false }} />
         <Stack.Screen
           name="Main"
@@ -90,6 +95,10 @@ function AppNavigation() {
         <Stack.Screen
           name="Cart"
           component={CartScreen}
+          options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Address"
+          component={AddAdressScreen}
           options={{ headerShown: false }} />
         <Stack.Screen
           name="User"

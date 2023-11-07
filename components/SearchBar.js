@@ -1,8 +1,30 @@
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Pressable } from 'react-native'
-import React from 'react'
-import { MagnifyingGlassIcon, MicrophoneIcon, MapPinIcon, ChevronDownIcon } from 'react-native-heroicons/outline'
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView } from 'react-native'
+import React, { useState } from 'react'
+import { MagnifyingGlassIcon, MicrophoneIcon, ChevronDownIcon, PlusCircleIcon, ViewfinderCircleIcon} from 'react-native-heroicons/outline'
+import {MapPinIcon} from 'react-native-heroicons/solid'
+import Modal from 'react-native-modal';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+
+
 
 const SearchBar = () => {
+     const Navigation = useNavigation();
+    const [isModalVisible, setModalVisible] = useState(false);
+    const insets = useSafeAreaInsets();
+
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
+    const closeModal = () => {
+        setModalVisible(false);
+    };
+    const closeModalAndNavigate = () => {
+        setModalVisible(false);
+        // Navigate to the Address page using your navigation library's navigation method
+        Navigation.navigate('Address'); // Replace 'Address' with the actual route name for your Address page
+    };
+
     return (
         <View>
             {/* search bar */}
@@ -16,11 +38,49 @@ const SearchBar = () => {
             {/* Address */}
             <View style={styles.addressContainer}>
                 <MapPinIcon size={30} color="black" style={styles.mapPinIcon} />
-                <Pressable>
+                <TouchableOpacity onPress={toggleModal} >
                     <Text style={styles.addressText}>Deliver to Priyank - Bhopal 464221</Text>
-                </Pressable>
+                </TouchableOpacity>
                 <ChevronDownIcon size={30} color="black" style={styles.chevronIcon} />
             </View>
+            <Modal
+                isVisible={isModalVisible}
+                onBackdropPress={closeModal}
+                animationIn="slideInUp" 
+                animationOut="slideOutDown"
+                style={{
+                    justifyContent: 'flex-end',
+                    margin: 0,
+                    marginBottom: insets.bottom, 
+                }}
+                backdropOpacity={0} 
+                backdropColor="transparent" 
+            >
+                <View className="bg-white w-screen h-96">
+                    <View>
+                        <Text className="mt-3 font-semibold pl-4 text-xl text-black">Choose Your location</Text>
+                        <Text className="px-4 text-xm text-gray-700">Select Delivery Location to see product availiblity and delivery options.</Text>
+                    </View>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        {/* Add new Delivery Address box */}
+                       <TouchableOpacity onPress={closeModalAndNavigate} className="w-44 h-44 m-5 pt-4  bg-gray-100 justify-center items-center border-2 border-gray-400">
+                        <PlusCircleIcon size={60} color="gray" style={{alignSelf : 'center', paddingTop : 5, }} />
+                        <Text className="font-semibold text-lg text-blue-600 text-center">Add new delivery Address</Text>
+                       </TouchableOpacity>
+                    </ScrollView>
+                       {/* Enter Your Pincode */}
+                       <TouchableOpacity className="flex-row px-4 text-xm space-x-1">
+                        <MapPinIcon size={30} color="black" />
+                        <Text className="text-blue-600 text-lg font-semibold">Enter Your Pincode</Text>
+                       </TouchableOpacity>
+                       {/* Use my current location */}
+                       <TouchableOpacity className="flex-row px-4 mb-4 mt-1 space-x-1">
+                        <ViewfinderCircleIcon size={30} color="black" />
+                        <Text className="text-blue-600 text-lg">Use my current location</Text>
+                       </TouchableOpacity>
+                    
+                </View>
+            </Modal>
         </View>
     )
 }

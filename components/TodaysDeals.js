@@ -10,11 +10,6 @@ const TodaysDeals = () => {
   
   const Navigation = useNavigation();
 
-        const dispatch = useDispatch();
-      
-        const handleAddToCart = (item) => {
-          dispatch(addToCart(item));
-        };
     
 
     return (
@@ -41,12 +36,8 @@ const TodaysDeals = () => {
                 }
               >
                 <Image style={styles.image} source={{ uri: item?.image }} />
-                <Text style={styles.discountText}>{item.offer} off</Text>
-                <TouchableOpacity
-                  style={styles.addToCartButton}
-                  onPress={() => handleAddToCart(item)} 
-                >
-                  <Text style={styles.addToCartButtonText}>Add to Cart</Text>
+                <TouchableOpacity style={styles.addToCartButton} >
+                  <Text style={styles.addToCartButtonText}>{item?.offer} off</Text>
                 </TouchableOpacity>
               </TouchableOpacity>
             ))}
@@ -95,9 +86,11 @@ const styles = StyleSheet.create({
     },
     addToCartButton: {
         backgroundColor: "#007bff",
-        paddingVertical: 15,
+        paddingVertical: 5,
+        paddingHorizontal : 25,
         borderRadius: 5,
         marginTop: 8,
+
       },
       addToCartButtonText: {
         color: "white",

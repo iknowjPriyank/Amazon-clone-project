@@ -27,8 +27,11 @@ const ProductInfoScreen = () => {
             setAddedToCart(false);
         }, 3000);
     };
-
-    const cart = useSelector((state) => state.cart.cart);
+  
+    function handleBuyNow(){
+        addItemToCart(Route?.params)
+        Navigation.navigate('Cart')
+    }
 
 
     return (
@@ -108,7 +111,7 @@ const ProductInfoScreen = () => {
                         )}
                     </Pressable>
 
-                    <Pressable style={styles.buyNowButton}>
+                    <Pressable style={styles.buyNowButton} onPress={handleBuyNow}>
                         <Text>Buy Now</Text>
                     </Pressable>
                 </View>
