@@ -66,6 +66,7 @@ export const offers = [
 export const deals = [
     {
         id: "20",
+        offer : '5%',
         title: "OnePlus Nord CE 3 Lite 5G (Pastel Lime, 8GB RAM, 128GB Storage)",
         oldPrice: 25000,
         price: 19000,
@@ -86,6 +87,7 @@ export const deals = [
             "Samsung Galaxy S20 FE 5G (Cloud Navy, 8GB RAM, 128GB Storage) with No Cost EMI & Additional Exchange Offers",
         oldPrice: 74000,
         price: 26000,
+        offer : '6%',
         image:
             "https://images-eu.ssl-images-amazon.com/images/G/31/img23/Wireless/Samsung/SamsungBAU/S20FE/GW/June23/BAU-27thJune/xcm_banners_2022_in_bau_wireless_dec_s20fe-rv51_580x800_in-en.jpg",
         carouselImages: [
@@ -103,6 +105,7 @@ export const deals = [
             "Samsung Galaxy M14 5G (ICY Silver, 4GB, 128GB Storage) | 50MP Triple Cam | 6000 mAh Battery | 5nm Octa-Core Processor | Android 13 | Without Charger",
         oldPrice: 16000,
         price: 14000,
+        offer : '8%',
         image:
             "https://images-eu.ssl-images-amazon.com/images/G/31/img23/Wireless/Samsung/CatPage/Tiles/June/xcm_banners_m14_5g_rv1_580x800_in-en.jpg",
         carouselImages: [
@@ -115,6 +118,7 @@ export const deals = [
     },
     {
         id: "50",
+        offer : '10%',
         title:
             "realme narzo N55 (Prime Blue, 4GB+64GB) 33W Segment Fastest Charging | Super High-res 64MP Primary AI Camera",
         oldPrice: 12999,

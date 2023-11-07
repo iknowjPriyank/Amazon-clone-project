@@ -1,15 +1,18 @@
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView } from 'react-native'
 import React, { useState } from 'react'
-import { MagnifyingGlassIcon, MicrophoneIcon, ChevronDownIcon, PlusCircleIcon, ViewfinderCircleIcon} from 'react-native-heroicons/outline'
-import {MapPinIcon} from 'react-native-heroicons/solid'
+import { MagnifyingGlassIcon, MicrophoneIcon, ChevronDownIcon, PlusCircleIcon, ViewfinderCircleIcon } from 'react-native-heroicons/outline'
+import { MapPinIcon } from 'react-native-heroicons/solid'
 import Modal from 'react-native-modal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
 
 
-const SearchBar = () => {
-     const Navigation = useNavigation();
+
+const SearchBar = ({user}) => {
+   
+    
+    const Navigation = useNavigation();
     const [isModalVisible, setModalVisible] = useState(false);
     const insets = useSafeAreaInsets();
 
@@ -21,9 +24,11 @@ const SearchBar = () => {
     };
     const closeModalAndNavigate = () => {
         setModalVisible(false);
-        // Navigate to the Address page using your navigation library's navigation method
-        Navigation.navigate('Address'); // Replace 'Address' with the actual route name for your Address page
+        Navigation.navigate('Address')
     };
+
+
+
 
     return (
         <View>
@@ -46,15 +51,15 @@ const SearchBar = () => {
             <Modal
                 isVisible={isModalVisible}
                 onBackdropPress={closeModal}
-                animationIn="slideInUp" 
+                animationIn="slideInUp"
                 animationOut="slideOutDown"
                 style={{
                     justifyContent: 'flex-end',
                     margin: 0,
-                    marginBottom: insets.bottom, 
+                    marginBottom: insets.bottom,
                 }}
-                backdropOpacity={0} 
-                backdropColor="transparent" 
+                backdropOpacity={0}
+                backdropColor="transparent"
             >
                 <View className="bg-white w-screen h-96">
                     <View>
@@ -63,22 +68,22 @@ const SearchBar = () => {
                     </View>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                         {/* Add new Delivery Address box */}
-                       <TouchableOpacity onPress={closeModalAndNavigate} className="w-44 h-44 m-5 pt-4  bg-gray-100 justify-center items-center border-2 border-gray-400">
-                        <PlusCircleIcon size={60} color="gray" style={{alignSelf : 'center', paddingTop : 5, }} />
-                        <Text className="font-semibold text-lg text-blue-600 text-center">Add new delivery Address</Text>
-                       </TouchableOpacity>
+                        <TouchableOpacity onPress={closeModalAndNavigate} className="w-44 h-44 m-5 pt-4  bg-gray-100 justify-center items-center border-2 border-gray-400">
+                            <PlusCircleIcon size={60} color="gray" style={{ alignSelf: 'center', paddingTop: 5, }} />
+                            <Text className="font-semibold text-lg text-blue-600 text-center">Add new delivery Address</Text>
+                        </TouchableOpacity>
                     </ScrollView>
-                       {/* Enter Your Pincode */}
-                       <TouchableOpacity className="flex-row px-4 text-xm space-x-1">
+                    {/* Enter Your Pincode */}
+                    <TouchableOpacity className="flex-row px-4 text-xm space-x-1">
                         <MapPinIcon size={30} color="black" />
                         <Text className="text-blue-600 text-lg font-semibold">Enter Your Pincode</Text>
-                       </TouchableOpacity>
-                       {/* Use my current location */}
-                       <TouchableOpacity className="flex-row px-4 mb-4 mt-1 space-x-1">
+                    </TouchableOpacity>
+                    {/* Use my current location */}
+                    <TouchableOpacity className="flex-row px-4 mb-4 mt-1 space-x-1">
                         <ViewfinderCircleIcon size={30} color="black" />
-                        <Text className="text-blue-600 text-lg">Use my current location</Text>
-                       </TouchableOpacity>
-                    
+                        <Text className="text-blue-600 text-lg">Use my current Address</Text>
+                    </TouchableOpacity>
+
                 </View>
             </Modal>
         </View>

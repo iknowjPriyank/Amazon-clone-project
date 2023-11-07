@@ -17,10 +17,10 @@ const TrendingDeals = () => {
                         key={item.id}
                         onPress={() =>
                             Navigation.navigate('Info', {
-                                id: item.id,
-                                title: item.title,
-                                image : item.image,
-                                offer : item.offer,
+                                id: item?.id,
+                                title: item?.title,
+                                image : item?.image,
+                                offer : item?.offer,
                                 price: item?.price,
                                 carouselImages: item.carouselImages,
                                 color: item?.color,
