@@ -3,6 +3,7 @@ import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from "react
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart, decrementQuantity, incrementQuantity } from "../redux/CartSlice";
 import SearchBar from "../components/SearchBar";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const CartScreen = () => {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const CartScreen = () => {
   const totalPrice = calculateTotalPrice();
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <SearchBar />
 
       {cartItems.length === 0 ? (
@@ -83,7 +84,7 @@ const CartScreen = () => {
           </TouchableOpacity>
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

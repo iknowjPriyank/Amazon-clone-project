@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import React from 'react'
 import Categories from '../components/Categories'
 import ImageSlider from '../components/ImageSlider'
@@ -6,6 +6,7 @@ import TrendingDeals from '../components/TrendingDeals'
 import TodaysDeals from '../components/TodaysDeals'
 import SearchBar from '../components/SearchBar'
 import DropDownComponent from '../components/DropDownComponent'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 
 

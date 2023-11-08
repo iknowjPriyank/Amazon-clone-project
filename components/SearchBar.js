@@ -1,17 +1,18 @@
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { MagnifyingGlassIcon, MicrophoneIcon, ChevronDownIcon, PlusCircleIcon, ViewfinderCircleIcon } from 'react-native-heroicons/outline'
 import { MapPinIcon } from 'react-native-heroicons/solid'
 import Modal from 'react-native-modal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 
-const SearchBar = ({user}) => {
-   
-    
+const SearchBar = () => {
+
+     
     const Navigation = useNavigation();
     const [isModalVisible, setModalVisible] = useState(false);
     const insets = useSafeAreaInsets();
@@ -27,8 +28,41 @@ const SearchBar = ({user}) => {
         Navigation.navigate('Address')
     };
 
+    
+    // Fetching Address data from Local storage
+    const [addresses, setAddresses] = useState([]);
 
+    useEffect(() => {
+        const fetchAddresses = async () => {
+            try {
+                const data = await AsyncStorage.getItem('userData');
+                if (data) {
+                    const userDataArray = JSON.parse(data);
+                    const addressesArray = userDataArray.map(user => user.addresses).flat();
+                    setAddresses(addressesArray);
+                }
+            } catch (error) {
+                console.error('Error fetching addresses: ', error);
+            }
+        };
 
+        fetchAddresses();
+    }, []);
+
+     // Setting the same landmart and pincode user selected 
+    const [selectedAddress, setSelectedAddress] = useState("") 
+    useEffect(() => {
+        if (selectedAddress) {
+            closeModal();
+        }
+    }, [selectedAddress]);
+    
+    const handleClickOnAddress = (item) => {
+        toggleModal();
+        setSelectedAddress(item);
+    };
+    
+   
 
     return (
         <View>
@@ -41,13 +75,19 @@ const SearchBar = ({user}) => {
                 <MicrophoneIcon size={30} color="black" style={styles.microphoneIcon} />
             </View>
             {/* Address */}
-            <View style={styles.addressContainer}>
+            <TouchableOpacity onPress={toggleModal} style={styles.addressContainer}>
                 <MapPinIcon size={30} color="black" style={styles.mapPinIcon} />
-                <TouchableOpacity onPress={toggleModal} >
-                    <Text style={styles.addressText}>Deliver to Priyank - Bhopal 464221</Text>
+                {selectedAddress ? (
+                    <TouchableOpacity>
+                        <Text className="font-500 text-black text-base">Deliver to {selectedAddress?.landmark} - {selectedAddress?.pincode}</Text>
+                    </TouchableOpacity>
+                ) : (
+                    <TouchableOpacity>
+                    <Text>Select Your Address</Text>
                 </TouchableOpacity>
+                )}
                 <ChevronDownIcon size={30} color="black" style={styles.chevronIcon} />
-            </View>
+            </TouchableOpacity>
             <Modal
                 isVisible={isModalVisible}
                 onBackdropPress={closeModal}
@@ -68,10 +108,24 @@ const SearchBar = ({user}) => {
                     </View>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                         {/* Add new Delivery Address box */}
-                        <TouchableOpacity onPress={closeModalAndNavigate} className="w-44 h-44 m-5 pt-4  bg-gray-100 justify-center items-center border-2 border-gray-400">
+                        <TouchableOpacity onPress={closeModalAndNavigate} className="w-44 h-44 m-3 pt-4  bg-gray-100 justify-center items-center border-2 rounded-md border-gray-300">
                             <PlusCircleIcon size={60} color="gray" style={{ alignSelf: 'center', paddingTop: 5, }} />
                             <Text className="font-semibold text-lg text-blue-600 text-center">Add new delivery Address</Text>
                         </TouchableOpacity>
+                        {/* Already Added addresses */}
+                        {addresses?.map((item, index) => (
+                            <TouchableOpacity key={index} onPress={() => handleClickOnAddress(item)} className="w-44 h-44 m-3 bg-gray-100 justify-center border-2 border-gray-300 rounded-md" style={{ backgroundColor : selectedAddress == item ? "#FBCEB1" : '#FFF' }}>
+                                <View className="flex-row">
+                                    <Text className="text-xl font-bold mb-2 pl-1">{item?.fullName}</Text>
+                                    <MapPinIcon size={24} color="red" />
+                                </View>
+                                <Text style={styles.addressText}>{item?.landmark}</Text>
+                                <Text style={styles.addressText}>{item?.addressLine1}, {item?.addressLine2}</Text>
+                                <Text style={styles.addressText}>{item.mobileNumber}</Text>
+                                <Text style={styles.addressText}>{item.pincode}</Text>
+                            </TouchableOpacity>
+                        ))}
+
                     </ScrollView>
                     {/* Enter Your Pincode */}
                     <TouchableOpacity className="flex-row px-4 text-xm space-x-1">

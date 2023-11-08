@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, SafeAreaView, Image, KeyboardAvoidingView, TextInput, TouchableOpacity, Alert } from 'react-native'
+import { StyleSheet, Text, View, Image, KeyboardAvoidingView, TextInput, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { EnvelopeIcon, LockClosedIcon, UserIcon } from 'react-native-heroicons/solid'
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { userData } from '../components/user';
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 
 

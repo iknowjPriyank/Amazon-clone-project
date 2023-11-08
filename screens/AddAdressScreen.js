@@ -1,10 +1,12 @@
-import { Alert, StyleSheet, Text, View, ScrollView, SafeAreaView, TextInput, TouchableOpacity } from 'react-native'
+import { Alert, StyleSheet, Text, View, ScrollView,  TextInput, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { MicrophoneIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useNavigation } from '@react-navigation/native'
 
 const AddAdressScreen = () => {
-
+    const Navigation = useNavigation()
     const [fullName, setFullName] = useState('');
     const [mobileNumber, setMobileNumber] = useState('');
     const [addressLine1, setAddressLine1] = useState('');
@@ -50,6 +52,7 @@ const AddAdressScreen = () => {
 
                 // Address added successfully, you can navigate back or show a success message
                 Alert.alert('Success', 'Address added successfully');
+                Navigation.navigate('Home')
                 // Log the updated user data for verification
                 console.log('Updated User Data:', dataArray);
             } else {
@@ -102,14 +105,14 @@ const AddAdressScreen = () => {
                     <Text style={styles.label}>Address Line 2</Text>
                     <TextInput
                         style={styles.input}
-                        placeholder="Area, Street, Sector, Village"
+                        placeholder="Area, Street, Sector"
                         value={addressLine2}
                         onChangeText={setAddressLine2}
                     />
                     <Text style={styles.label}>Landmark</Text>
                     <TextInput
                         style={styles.input}
-                        placeholder="Enter landmark if any"
+                        placeholder="Enter your City Name Only"
                         value={landmark}
                         onChangeText={setLandmark}
                     />
