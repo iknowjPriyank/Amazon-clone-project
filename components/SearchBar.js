@@ -1,13 +1,28 @@
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { MagnifyingGlassIcon, MicrophoneIcon, ChevronDownIcon, PlusCircleIcon, ViewfinderCircleIcon } from 'react-native-heroicons/outline'
 import { MapPinIcon } from 'react-native-heroicons/solid'
 import Modal from 'react-native-modal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 
+
+// Fetching the Address data
+const fetchAddresses = async (setAddresses) => {
+    try {
+      const data = await AsyncStorage.getItem('userData');
+      if (data) {
+        const userDataArray = JSON.parse(data);
+        const addressesArray = userDataArray.map(user => user.addresses).flat();
+        setAddresses(addressesArray);
+      }
+    } catch (error) {
+      console.error('Error fetching addresses: ', error);
+    }
+  };
 
 
 const SearchBar = () => {
@@ -32,22 +47,12 @@ const SearchBar = () => {
     // Fetching Address data from Local storage
     const [addresses, setAddresses] = useState([]);
 
-    useEffect(() => {
-        const fetchAddresses = async () => {
-            try {
-                const data = await AsyncStorage.getItem('userData');
-                if (data) {
-                    const userDataArray = JSON.parse(data);
-                    const addressesArray = userDataArray.map(user => user.addresses).flat();
-                    setAddresses(addressesArray);
-                }
-            } catch (error) {
-                console.error('Error fetching addresses: ', error);
-            }
-        };
-
-        fetchAddresses();
-    }, []);
+    // Call fetchAddresses whenever the screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      fetchAddresses(setAddresses);
+    }, [])
+  );
 
      // Setting the same landmart and pincode user selected 
     const [selectedAddress, setSelectedAddress] = useState("") 
@@ -78,15 +83,15 @@ const SearchBar = () => {
             <TouchableOpacity onPress={toggleModal} style={styles.addressContainer}>
                 <MapPinIcon size={30} color="black" style={styles.mapPinIcon} />
                 {selectedAddress ? (
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={toggleModal}>
                         <Text className="font-500 text-black text-base">Deliver to {selectedAddress?.landmark} - {selectedAddress?.pincode}</Text>
                     </TouchableOpacity>
                 ) : (
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={toggleModal}>
                     <Text>Select Your Address</Text>
                 </TouchableOpacity>
                 )}
-                <ChevronDownIcon size={30} color="black" style={styles.chevronIcon} />
+                <ChevronDownIcon onPress={toggleModal} size={30} color="black" style={styles.chevronIcon} />
             </TouchableOpacity>
             <Modal
                 isVisible={isModalVisible}

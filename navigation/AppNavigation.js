@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -13,6 +13,7 @@ import CartScreen from '../screens/CartScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import AddAdressScreen from '../screens/AddAdressScreen';
 import AddressScreen from '../screens/AddressScreen';
+import EditAddressScreen from '../screens/EditAddressScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -61,6 +62,12 @@ function BottomTabs() {
 }
 
 function AppNavigation() {
+  const [selectedAddress, setSelectedAddress] = useState(null);
+
+  const handleAddressSelection = (address) => {
+    setSelectedAddress(address);
+  };
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='LogIn'>
@@ -74,11 +81,15 @@ function AppNavigation() {
           options={{ headerShown: false }} />
         <Stack.Screen
           name="Main"
-          component={BottomTabs}
-          options={{ headerShown: false }} />
+          options={{ headerShown: false }}
+          component={BottomTabs} />
         <Stack.Screen
           name="Info"
           component={ProductInfoScreen}
+          options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Edit"
+          component={EditAddressScreen}
           options={{ headerShown: false }} />
         <Stack.Screen
           name="Cart"

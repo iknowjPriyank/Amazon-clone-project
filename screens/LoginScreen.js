@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, KeyboardAvoidingView, TextInput, TouchableOpacity, Alert} from 'react-native'
 import React, { useState } from 'react'
 import { EnvelopeIcon, LockClosedIcon } from 'react-native-heroicons/solid'
 import { useNavigation } from '@react-navigation/native';

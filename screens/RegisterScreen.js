@@ -12,48 +12,71 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 const RegisterScreen = () => {
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const Navigation = useNavigation();
 
+  const validateName = () => {
+    const namePattern = /^[a-zA-Z ]+$/;
+    if (!namePattern.test(name)) {
+      setNameError('Name should only contain letters and spaces');
+      return false;
+    }
+    setNameError('');
+    return true;
+  };
 
+  const validateEmail = () => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      setEmailError('Invalid email address');
+      return false;
+    }
+    setEmailError('');
+    return true;
+  };
+
+  const validatePassword = () => {
+    if (password.length < 6 || /[^a-zA-Z0-9]/.test(password)) {
+      setPasswordError('Password must be at least 6 characters long and should not contain special characters');
+      return false;
+    }
+    setPasswordError('');
+    return true;
+  };
 
   const handleRegister = async () => {
     if (name && email && password) {
-      try {
-        // Update userData object with current state values
-        userData.name = name;
-        userData.email = email;
-        userData.password = password;
+      if (validateName() && validateEmail() && validatePassword()) {
+        try {
+          userData.name = name;
+          userData.email = email;
+          userData.password = password;
 
-        // Retrieve existing data from AsyncStorage (if any)
-        const existingData = await AsyncStorage.getItem('userData');
-        let dataArray = [];
+          const existingData = await AsyncStorage.getItem('userData');
+          let dataArray = [];
 
-        if (existingData !== null) {
-          // Parse existing data and add new user data to the array
-          dataArray = JSON.parse(existingData);
+          if (existingData !== null) {
+            dataArray = JSON.parse(existingData);
+          }
+
+          dataArray.push(userData);
+          await AsyncStorage.setItem('userData', JSON.stringify(dataArray));
+
+          Alert.alert('Registration Successful', 'You have registered successfully');
+          Navigation.replace('LogIn');
+        } catch (error) {
+          console.error('Error saving user data: ', error);
         }
-
-        // Add new user data to the array
-        dataArray.push(userData);
-
-        // Save the updated array back to AsyncStorage
-        await AsyncStorage.setItem('userData', JSON.stringify(dataArray));
-
-        Alert.alert('Registration Successful', 'You have registered successfully');
-        Navigation.navigate('Home');
-      } catch (error) {
-        console.error('Error saving user data: ', error);
       }
     } else {
       Alert.alert('Error', 'Please fill in all fields');
     }
   };
-
-
-
 
 
   return (
@@ -78,6 +101,7 @@ const RegisterScreen = () => {
               <TextInput value={name} onChangeText={text => setName(text)} className="text-lg" placeholder='Enter Your Name here' />
             </View>
           </View>
+          {nameError ? <Text style={styles.errorText}>{nameError}</Text> : null}
           {/* Email */}
           <View className="mt-10 flex-row items-center space-x-2 bg-gray-300 w-11/12 rounded-sm" style={{ alignSelf: 'center' }}>
             <View>
@@ -87,6 +111,7 @@ const RegisterScreen = () => {
               <TextInput value={email} onChangeText={text => setEmail(text)} className="text-lg" placeholder='Enter Your Email here' />
             </View>
           </View>
+          {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
           {/* Password */}
           <View className="mt-10 flex-row items-center space-x-2 bg-gray-300 w-11/12 rounded" style={{ alignSelf: 'center' }}>
             <View>
@@ -97,6 +122,7 @@ const RegisterScreen = () => {
             </View>
           </View>
         </View>
+        {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
 
         <View className="flex-row justify-between w-11/12 mt-4 pr-2 pl-2" style={{ alignSelf: 'center' }}>
           <View>
@@ -129,4 +155,32 @@ const RegisterScreen = () => {
 
 export default RegisterScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 5,
+    marginVertical: 10,
+    paddingHorizontal: 10,
+  },
+  icon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    fontSize: 18,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    marginTop: 5,
+    marginLeft : 20,
+  },
+});

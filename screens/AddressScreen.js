@@ -85,7 +85,7 @@ const handleDeleteAddress = async (index) => {
                         <Text style={styles.addressText}>Pin Code: {item.pincode}</Text>
                         <View style={styles.buttonContainer}>
                             <Pressable style={styles.button}>
-                                <Text  style={styles.buttonText} >Edit</Text>
+                                <Text  style={styles.buttonText} onPress={() => Navigation.navigate('Edit', { addressData: item })}>Edit</Text>
                             </Pressable>
                             <Pressable onPress={handleDeleteAddress} style={styles.button}>
                                 <Text  style={styles.buttonText}>Remove</Text>

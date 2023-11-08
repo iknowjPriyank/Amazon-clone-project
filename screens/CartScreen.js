@@ -1,7 +1,8 @@
 import React from "react";
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, Image, Pressable, StyleSheet, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart, decrementQuantity, incrementQuantity } from "../redux/CartSlice";
+import { PlusIcon, MinusIcon, TrashIcon } from "react-native-heroicons/outline";
 import SearchBar from "../components/SearchBar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -21,11 +22,6 @@ const CartScreen = () => {
     dispatch(incrementQuantity({ id: itemId }));
   };
 
-  const handleCheckout = () => {
-    // Implement your payment gateway logic here
-    // For example, you can show an alert for demonstration purposes
-    Alert.alert("Checkout", "Redirecting to Payment Gateway...");
-  };
   const calculateTotalPrice = () => {
     let total = 0;
     cartItems.forEach((item) => {
@@ -33,136 +29,171 @@ const CartScreen = () => {
     });
     return total;
   };
-  const totalPrice = calculateTotalPrice();
+  
+  const total = calculateTotalPrice();
+
+  const handleCheckout = () => {
+    // Implement your payment gateway logic here
+    // For example, you can show an alert for demonstration purposes
+    Alert.alert("Checkout", "Redirecting to Payment Gateway...");
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.scrollView}>
+      {/* search bar */}
       <SearchBar />
+      <View style={styles.subtotalContainer}>
+        <Text style={styles.subtotalText}>Subtotal : </Text>
+        <Text style={styles.totalText}>{total}</Text>
+      </View>
+      <Text style={{ marginHorizontal: 10 }}>EMI details Available</Text>
 
-      {cartItems.length === 0 ? (
-        <Text style={styles.emptyCartText}>Your Cart is Empty</Text>
-      ) : (
-        <FlatList
-          data={cartItems}
-          keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
-          renderItem={({ item }) => (
-            
-            <View style={styles.cartItemContainer}>
-              <Image
-                source={{ uri: item.image }}
-                style={styles.thumbnail}
-              />
-              <View style={styles.itemDetails}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.price}>Rs.{item.price} x {item.quantity}</Text>
-                <Text style={styles.total}>Total: Rs.{item.price * item.quantity}</Text>
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.button} onPress={() => handleRemoveItem(item.id)}>
-                    <Text style={styles.buttonText}>Remove</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.button} onPress={() => handleDecreaseQuantity(item.id)}>
-                    <Text style={styles.buttonText}>-1</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.button} onPress={() => handleIncreaseQuantity(item.id)}>
-                    <Text style={styles.buttonText}>+1</Text>
-                  </TouchableOpacity>
-                </View>
+      <Pressable style={styles.proceedButton}>
+        <Text>Proceed to Buy ({cartItems.length}) items</Text>
+      </Pressable>
+
+      <Text style={styles.divider} />
+
+      <ScrollView style={{ marginHorizontal: 10 }} showsVerticalScrollIndicator={false}>
+        {cartItems?.map((item, index) => (
+          <View style={styles.itemContainer} key={index}>
+            <Pressable style={styles.itemContentContainer}>
+              <View>
+                <Image style={styles.itemImage} source={{ uri: item?.image }} />
               </View>
+
+              <View style={styles.itemDetails}>
+                <Text numberOfLines={3}>{item?.title}</Text>
+                <Text style={styles.itemPrice}>{item?.price}</Text>
+                <Image style={styles.stockImage} source={{ uri: "https://assets.stickpng.com/thumbs/5f4924cc68ecc70004ae7065.png" }} />
+                <Text style={{ color: "green" }}>In Stock</Text>
+              </View>
+            </Pressable>
+
+            <View style={styles.quantityContainer}>
+              <Pressable onPress={() => handleDecreaseQuantity(item.id)} style={styles.quantityButton}>
+                <MinusIcon name="minus" size={24} color="black" />
+              </Pressable>
+              <View style={styles.quantityTextContainer}>
+                <Text>{item?.quantity}</Text>
+              </View>
+              <Pressable onPress={() => handleIncreaseQuantity(item.id)} style={styles.quantityButton}>
+                <PlusIcon name="plus" size={24} color="black" />
+              </Pressable>
             </View>
-          )}
-        />
-      )}
 
-
-      {cartItems.length > 0 && (
-        <View>
-          <View style={styles.checkoutContainer}>
-            <Text style={styles.total}>Total: Rs.{totalPrice}</Text>
+            <View style={styles.actionButtonsContainer}>
+              <Pressable onPress={() => handleRemoveItem(item.id)} style={styles.deleteButton}>
+                <TrashIcon  name="Delete" size={20} color="black"  />
+                <Text>Delete</Text>
+              </Pressable>
+              <Pressable style={styles.deleteButton}>
+                <Text>Save For Later</Text>
+              </Pressable>
+              <Pressable style={styles.deleteButton}>
+                <Text>See More Like this</Text>
+              </Pressable>
+            </View>
           </View>
-          <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
-            <Text style={styles.checkoutButtonText}>Checkout</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+        ))}
+      </ScrollView>
     </SafeAreaView>
   );
 };
 
-
 const styles = StyleSheet.create({
-  container: {
+  scrollView: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "white",
   },
-  emptyCartText: {
-    textAlign: "center",
-    marginTop: 50,
-    fontSize: 18,
-    color: "#888",
-  },
-  cartItemContainer: {
+  subtotalContainer: {
+    padding: 10,
     flexDirection: "row",
-    marginBottom: 16,
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    padding: 12,
     alignItems: "center",
   },
-  thumbnail: {
-    width: 80,
-    height: 80,
-    borderRadius: 8,
-    marginRight: 12,
+  subtotalText: {
+    fontSize: 18,
+    fontWeight: "400",
+  },
+  totalText: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  proceedButton: {
+    backgroundColor: "#FFC72C",
+    padding: 10,
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 10,
+    marginTop: 10,
+  },
+  itemContainer: {
+    backgroundColor: "white",
+    marginVertical: 10,
+    borderBottomColor: "#F0F0F0",
+    borderWidth: 2,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    borderRightWidth: 0,
+  },
+  itemContentContainer: {
+    marginVertical: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  itemImage: {
+    width: 140,
+    height: 140,
+    resizeMode: "contain",
   },
   itemDetails: {
-    flex: 1,
+    width: 150,
+    marginTop: 10,
   },
-  title: {
-    fontSize: 16,
+  itemPrice: {
+    fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 4,
+    marginTop: 6,
   },
-  price: {
-    fontSize: 14,
-    color: "#888",
-    marginBottom: 4,
+  stockImage: {
+    width: 30,
+    height: 30,
+    resizeMode: "contain",
   },
-  total: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#ff9900",
-  },
-  buttonContainer: {
+  quantityContainer: {
     flexDirection: "row",
-    marginTop: 8,
-  },
-  button: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    backgroundColor: "#007bff",
-    borderRadius: 5,
-    marginHorizontal: 8,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
-  },
-  checkoutButton: {
-    backgroundColor: "#28a745",
-    paddingVertical: 16,
     alignItems: "center",
-    margin: 16,
-    borderRadius: 8,
+    gap: 10,
   },
-  checkoutButtonText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 18,
+  quantityButton: {
+    backgroundColor: "#D8D8D8",
+    padding: 7,
+    borderTopLeftRadius: 6,
+    borderBottomLeftRadius: 6,
   },
-  checkoutContainer: {
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
+  quantityTextContainer: {
+    backgroundColor: "white",
+    paddingHorizontal: 18,
+    paddingVertical: 6,
+  },
+  deleteButton: {
+    backgroundColor: "white",
+    paddingHorizontal: 8,
+    paddingVertical: 10,
+    borderRadius: 5,
+    borderColor: "#C0C0C0",
+    borderWidth: 0.6,
+    flexDirection: "row",
+  },
+  actionButtonsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginBottom: 15,
+    marginTop : 15,
+    justifyContent : 'space-between',
+  },
 });
 
 export default CartScreen;

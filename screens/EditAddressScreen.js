@@ -3,18 +3,21 @@ import React, { useState, useEffect } from 'react'
 import { MicrophoneIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { KeyboardAvoidingView } from 'react-native'
 
-const AddAdressScreen = () => {
-    const Navigation = useNavigation()
-    const [fullName, setFullName] = useState('');
-    const [mobileNumber, setMobileNumber] = useState('');
-    const [addressLine1, setAddressLine1] = useState('');
-    const [addressLine2, setAddressLine2] = useState('');
-    const [landmark, setLandmark] = useState('');
-    const [pincode, setPincode] = useState('');
+const EditAddressScreen = () => {
+  
+    const Navigation = useNavigation();
+    const route = useRoute();
+    const { addressData } = route.params; // Access the address data passed from AddressScreen
 
+    const [fullName, setFullName] = useState(addressData.fullName || '');
+    const [mobileNumber, setMobileNumber] = useState(addressData.mobileNumber || '');
+    const [addressLine1, setAddressLine1] = useState(addressData.addressLine1 || '');
+    const [addressLine2, setAddressLine2] = useState(addressData.addressLine2 || '');
+    const [landmark, setLandmark] = useState(addressData.landmark || '');
+    const [pincode, setPincode] = useState(addressData.pincode || '');
 
     const handleSubmit = async () => {
         try {
@@ -23,47 +26,50 @@ const AddAdressScreen = () => {
                 Alert.alert('Error', 'Please fill in all required fields');
                 return;
             }
-
+    
             // Retrieve existing user data from AsyncStorage
             const existingData = await AsyncStorage.getItem('userData');
             let dataArray = [];
-            console.log('Existing User Data:', dataArray);
-
+    
             if (existingData !== null) {
                 dataArray = JSON.parse(existingData);
-
+    
                 // Get the index of the user data you want to update
                 const userIndex = 0; // Set the index based on your requirement
-
-                // Create a new address object
-                const newAddress = {
-                    fullName,
-                    mobileNumber,
-                    addressLine1,
-                    addressLine2,
-                    landmark,
-                    pincode,
-                };
-
-                // Add the new address to the user's addresses array
-                dataArray[userIndex].addresses.push(newAddress);
-
-                // Update user data in AsyncStorage
-                await AsyncStorage.setItem('userData', JSON.stringify(dataArray));
-
-                // Address added successfully, you can navigate back or show a success message
-                Alert.alert('Success', 'Address added successfully');
-                Navigation.navigate('Home')
-                // Log the updated user data for verification
-                console.log('Updated User Data:', dataArray);
+    
+                // Find the index of the address within the addresses array
+                const addressIndex = dataArray[userIndex].addresses.findIndex(
+                    (address) => address.id === addressData.id 
+                );
+    
+                if (addressIndex !== -1) {
+                    dataArray[userIndex].addresses[addressIndex] = {
+                        id: addressData.id, 
+                        fullName,
+                        mobileNumber,
+                        addressLine1,
+                        addressLine2,
+                        landmark,
+                        pincode,
+                    };
+    
+                    // Update user data in AsyncStorage
+                    await AsyncStorage.setItem('userData', JSON.stringify(dataArray));
+    
+                    Alert.alert('Success', 'Address updated successfully');
+                    Navigation.replace('Address'); 
+                } else {
+                
+                    Alert.alert('Error', 'Address not found');
+                }
             } else {
-                // No user data found, handle accordingly
                 Alert.alert('Error', 'No user data found');
             }
         } catch (error) {
-            console.error('Error adding address: ', error);
+            console.error('Error updating address: ', error);
         }
     };
+    
 
     return (
         <SafeAreaView>
@@ -79,7 +85,7 @@ const AddAdressScreen = () => {
                 {/* Fill the  Address */}
                 <KeyboardAvoidingView style={styles.container}>
                     <View className="border-0 bg-blue-200 rounded mb-5">
-                        <Text className="text-2xl text-black font-bold text-center mb-2">Add New Address</Text>
+                        <Text className="text-2xl text-black font-bold text-center mb-2">Update Your Address</Text>
                     </View>
                     <Text style={styles.label}>Full Name</Text>
                     <TextInput
@@ -134,7 +140,7 @@ const AddAdressScreen = () => {
     )
 }
 
-export default AddAdressScreen
+export default EditAddressScreen
 
 const styles = StyleSheet.create({
     searchBar: {
