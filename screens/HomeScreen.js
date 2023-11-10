@@ -6,10 +6,10 @@ import Categories from '../components/Categories';
 import ImageSlider from '../components/ImageSlider';
 import TrendingDeals from '../components/TrendingDeals';
 import TodaysDeals from '../components/TodaysDeals';
-import DropDownComponent from '../components/DropDownComponent';
+import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = () => {
-
+  const Navigation = useNavigation()
 
   return (
     <>
@@ -35,8 +35,6 @@ const HomeScreen = () => {
           {/* We are giving Border */}
           <Text style={{ height: 1, borderColor: 'gray', borderWidth: 2, marginTop: 15 }} />
 
-          {/* DropDown */}
-          <DropDownComponent />
         </ScrollView>
       </SafeAreaView>
     </>

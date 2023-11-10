@@ -27,8 +27,8 @@ const ProductInfoScreen = () => {
             setAddedToCart(false);
         }, 3000);
     };
-  
-    function handleBuyNow(){
+
+    function handleBuyNow() {
         addItemToCart(Route?.params)
         Navigation.navigate('Cart')
     }
@@ -69,23 +69,55 @@ const ProductInfoScreen = () => {
                             {Route?.params?.title}
                         </Text>
                         <Text style={styles.productPrice}>
-                            Price :- ₹{Route?.params?.price}
+                            Price :- ${Route?.params?.price}
                         </Text>
                     </View>
 
-                    <View style={styles.productDetail}>
-                        <Text style={styles.productDetailLabel}>Color: </Text>
-                        <Text style={styles.productDetailValue}>
-                            {Route?.params?.color}
-                        </Text>
-                    </View>
 
-                    <View style={styles.productDetail}>
-                        <Text style={styles.productDetailLabel}>Size: </Text>
-                        <Text style={styles.productDetailValue}>
-                            {Route?.params?.size}
-                        </Text>
-                    </View>
+                    {Route?.params?.color && (
+                        <View style={styles.productDetail}>
+
+                            <Text style={styles.productDetailValue}>
+                                <Text style={styles.productDetailLabel}>Color: {Route.params.color} </Text>
+                            </Text>
+                        </View>
+                    )}
+
+
+                    {Route?.params?.size && (
+                        <View style={styles.productDetail}>
+                            <Text style={styles.productDetailValue}>
+                                <Text style={styles.productDetailLabel}>Size:{Route.params.size} </Text>
+                            </Text>
+                        </View>
+                    )}
+                    {Route?.params?.brand && (
+                        <View style={styles.productDetail}>
+
+                            <Text style={styles.productDetailValue}>
+                                <Text style={styles.productDetailLabel}>Brand: {Route.params.brand} </Text>
+                            </Text>
+                        </View>
+                    )}
+
+                    {Route?.params?.stock && (
+                        <View style={styles.productDetail}>
+                            <Text style={styles.productDetailValue}>
+                                <Text style={styles.productDetailLabel}>Stock :{Route.params.stock} </Text>
+                            </Text>
+                        </View>
+                    )}
+                    {Route?.params?.description && (
+                        <View style={styles.productDetail}>
+                            <Text style={styles.productDetailValue}>
+                                <Text style={styles.productDetailLabel}>{Route.params.description} </Text>
+                            </Text>
+                        </View>
+                    )}
+
+
+
+
 
                     <View style={styles.productInfoContainer}>
                         <Text style={{ color: "#00CED1" }}>

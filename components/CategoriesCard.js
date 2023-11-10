@@ -1,10 +1,12 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 const CategoriesCard = (props) => {
-  const { imgUrl, title} = props;
+  const { imgUrl, title, onPress} = props;
+  const Navigation = useNavigation()
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={() => Navigation.navigate('Product')}>
       <Image source={imgUrl} style={styles.image} />
       <Text className= "font-bold text-xm">{title}</Text>
     </TouchableOpacity>

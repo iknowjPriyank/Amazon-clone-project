@@ -14,6 +14,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import AddAdressScreen from '../screens/AddAdressScreen';
 import AddressScreen from '../screens/AddressScreen';
 import EditAddressScreen from '../screens/EditAddressScreen';
+import DropDownComponent from '../components/DropDownComponent';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -39,7 +40,7 @@ function BottomTabs() {
         options={{
           tabBarLabel: 'Profile',
           tabBarLabelStyle: { color: '#008E97' },
-          headerShown: false,
+          // headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <SolidUserIcon name="user" size={30} color={color} />
           ),
@@ -70,7 +71,7 @@ function AppNavigation() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='LogIn'>
+      <Stack.Navigator initialRouteName='Main'>
         <Stack.Screen
           name="LogIn"
           component={LoginScreen}
@@ -86,6 +87,10 @@ function AppNavigation() {
         <Stack.Screen
           name="Info"
           component={ProductInfoScreen}
+          options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Product"
+          component={DropDownComponent}
           options={{ headerShown: false }} />
         <Stack.Screen
           name="Edit"
