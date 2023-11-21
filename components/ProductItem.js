@@ -1,8 +1,11 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { Text, View, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../redux/CartSlice';
 import { useNavigation } from '@react-navigation/native';
+
+const { width } = Dimensions.get('window');
+const itemWidth = (width - 40) / 2; 
 
 const ProductItem = ({ item }) => {
   const Navigation = useNavigation()
@@ -47,7 +50,7 @@ const ProductItem = ({ item }) => {
       </Text>
 
       <View style={styles.priceContainer}>
-        <Text style={styles.price}>{item?.price}</Text>
+        <Text style={styles.price}>${item?.price}</Text>
         <Text style={styles.rating}>{item?.rating} ratings</Text>
       </View>
 
@@ -66,7 +69,7 @@ const ProductItem = ({ item }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 180,
+    width: itemWidth,
     margin: 10,
     padding: 10,
     backgroundColor: 'white',

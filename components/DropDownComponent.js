@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import DropDownPicker from "react-native-dropdown-picker";
 import ProductItem from "../components/ProductItem";
 import { addToCart } from "../redux/CartSlice";
 import { products } from "../pages/db";
@@ -46,6 +45,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: "100%",
     marginBottom: 15,
+    flexDirection : 'row',
+    justifyContent : 'space-evenly',
     
   }
 });

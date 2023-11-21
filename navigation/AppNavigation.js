@@ -27,7 +27,7 @@ function BottomTabs() {
         component={HomeScreen}
         options={{
           tabBarLabel: 'Home',
-          tabBarLabelStyle: { color: '#008E97' },
+          tabBarLabelStyle: { color: '#008E97', fontWeight : 'bold', fontSize : 16 },
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <SolidHomeIcon name="home" size={30} color={color} />
@@ -39,8 +39,7 @@ function BottomTabs() {
         component={ProfileScreen}
         options={{
           tabBarLabel: 'Profile',
-          tabBarLabelStyle: { color: '#008E97' },
-          // headerShown: false,
+          tabBarLabelStyle: { color: '#008E97', fontWeight : 'bold', fontSize : 16},
           tabBarIcon: ({ color, size }) => (
             <SolidUserIcon name="user" size={30} color={color} />
           ),
@@ -51,7 +50,7 @@ function BottomTabs() {
         component={CartScreen}
         options={{
           tabBarLabel: 'Cart',
-          tabBarLabelStyle: { color: '#008E97' },
+          tabBarLabelStyle: { color: '#008E97', fontWeight : 'bold', fontSize : 16 },
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <SolidShoppingCartIcon name="shopping-cart" size={30} color={color} />
@@ -63,15 +62,11 @@ function BottomTabs() {
 }
 
 function AppNavigation() {
-  const [selectedAddress, setSelectedAddress] = useState(null);
-
-  const handleAddressSelection = (address) => {
-    setSelectedAddress(address);
-  };
+ 
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Main'>
+      <Stack.Navigator initialRouteName='LogIn'>
         <Stack.Screen
           name="LogIn"
           component={LoginScreen}

@@ -14,9 +14,10 @@ const HomeScreen = () => {
   return (
     <>
       <SafeAreaView className="flex-1 bg-white">
+
         {/* Pass selectedAddress and onAddressSelection as props to SearchBar */}
         <SearchBar />
-        
+
         <ScrollView>
           {/* Horizontal screen view  */}
           <Categories />
