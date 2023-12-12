@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, Image, KeyboardAvoidingView, TextInput, TouchableOpacity, Alert} from 'react-native'
-import React, { useState } from 'react'
-import { EnvelopeIcon, LockClosedIcon } from 'react-native-heroicons/solid'
+import { StyleSheet, Text, View, Image, KeyboardAvoidingView, TextInput, TouchableOpacity, Alert } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { EnvelopeIcon, LockClosedIcon, EyeIcon, EyeSlashIcon } from 'react-native-heroicons/solid'
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context'
+import axios from 'axios';
 
 
 
@@ -12,7 +13,28 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+
   const Navigation = useNavigation();
+
+  // const apiCall = async () => {
+  //   try {
+  //     const response = await axios.get("https://jsonplaceholder.typicode.com/todos");
+  //     console.log(response.data);
+  //   } catch (error) {
+  //     console.error('Error fetching data', error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   apiCall();
+  // }, []);
+
 
   const handleLogin = async () => {
     try {
@@ -37,6 +59,8 @@ const LoginScreen = () => {
       console.error('Error fetching user data: ', error);
     }
   };
+
+
 
   return (
     <SafeAreaView className=" bg-white flex-column justify-evenly">
@@ -63,8 +87,11 @@ const LoginScreen = () => {
             <View>
               <LockClosedIcon size={25} color="gray" style={{ marginLeft: 10 }} />
             </View>
-            <View className="w-10/12">
-              <TextInput value={password} onChangeText={text => setPassword(text)} secureTextEntry={true} className="text-lg " placeholder='Enter Your Password here' />
+            <View className="w-10/12 flex-row items-center justify-between">
+              <TextInput value={password} onChangeText={text => setPassword(text)} secureTextEntry={!isPasswordVisible} className="text-lg " placeholder='Enter Your Password here' />
+              <TouchableOpacity onPress={togglePasswordVisibility}>
+                {isPasswordVisible ? <EyeIcon size={25} color="gray" /> : <EyeSlashIcon size={25} color="gray" />}
+              </TouchableOpacity>
             </View>
           </View>
         </View>
